@@ -1,6 +1,15 @@
 import React from "react";
 
-export function ListingItem() {
+export function ListingItem({
+  id,
+  title,
+  description,
+  price,
+  condition,
+  imageUrl,
+  availability,
+  numOfStock,
+}) {
   return (
     <div class="relative flex flex-col">
       <div
@@ -18,7 +27,7 @@ export function ListingItem() {
           "
       >
         <img
-          src="https://images.unsplash.com/photo-1539185441755-769473a23570?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=543&amp;h=384&amp;q=80"
+          src={imageUrl}
           alt=""
           class="
               object-cover
@@ -46,9 +55,11 @@ export function ListingItem() {
         <div class="mt-1 flex-1">
           <div class="flex justify-between items-center gap-3">
             <div>
-              RM <span class="text-2xl font-bold">99</span>
+              RM <span class="text-2xl font-bold">{price}</span>
             </div>
-            <div class="text-sm text-gray-500">5 piece available</div>
+            <div class="text-sm text-gray-500">
+              {numOfStock} piece available
+            </div>
           </div>
           <p
             class="
@@ -60,7 +71,7 @@ export function ListingItem() {
               pointer-events-none
               "
           >
-            Nike Air 2021
+            {title}
           </p>
           <p
             class="
@@ -71,7 +82,7 @@ export function ListingItem() {
               pointer-events-none
               "
           >
-            So light it feels like walking in the air.
+            {description}
           </p>
         </div>
         <div class="flex flex-col md:flex-row gap-3 py-3">

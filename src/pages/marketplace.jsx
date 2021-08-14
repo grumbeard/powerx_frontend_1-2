@@ -2,7 +2,23 @@ import * as React from "react";
 import { ListingItem } from "../components/listing-item";
 import { ListingForm } from "../components/listing-form";
 
+function getListings() {
+  return fetch(
+    `https://ecomm-service.herokuapp.com/marketplace?page=1&limit=9`
+  ).then((res) => res.json());
+}
+
 export function Marketplace() {
+  const [listings, setListings] = React.useState(undefined);
+
+  function loadListings() {
+    getListings().then((data) => setListings(data));
+  }
+
+  React.useEffect(() => {
+    loadListings();
+  }, []);
+
   return (
     <main class="bg-gray-50 lg:flex">
       <div class="flex-1">
@@ -20,7 +36,19 @@ export function Marketplace() {
               xl:grid-cols-3 xl:gap-x-6
             "
           >
-            <ListingItem />
+            {listings &&
+              listings.map((listing) => (
+                <ListingItem
+                  id={listing._id}
+                  title={listing.title}
+                  description={listing.description}
+                  price={listing.price}
+                  condition={listing.condition}
+                  imageUrl={listing.imageUrl}
+                  availability={listing.availability}
+                  numOfStock={listing.numOfStock}
+                />
+              ))}
           </div>
         </div>
       </div>
