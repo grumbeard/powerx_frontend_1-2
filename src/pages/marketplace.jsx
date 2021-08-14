@@ -8,6 +8,12 @@ function getListings() {
   ).then((res) => res.json());
 }
 
+function handleDelete(id) {
+  fetch(`https://ecomm-service.herokuapp.com/marketplace/${id}`, {
+    method: "DELETE",
+  });
+}
+
 export function Marketplace() {
   const [listings, setListings] = React.useState(undefined);
 
@@ -47,6 +53,7 @@ export function Marketplace() {
                   imageUrl={listing.imageUrl}
                   availability={listing.availability}
                   numOfStock={listing.numOfStock}
+                  handleDelete={handleDelete}
                 />
               ))}
           </div>
