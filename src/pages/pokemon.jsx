@@ -7,9 +7,16 @@ function getPokemons() {
 }
 
 export function Pokemon() {
+    const languages = ['english', 'japanese', 'chinese'];
     const [pokemons, setPokemons] = React.useState(undefined);
-    const [language, setLanguage] = React.useState('english');
+    const [language, setLanguage] = React.useState(languages[0]);
     getPokemons().then(data => setPokemons(data));
+
+    function handlePokemonClick() {
+        const curr_idx = languages.findIndex(lang => lang === language);
+        const next_idx = (curr_idx < languages.length - 1) ? curr_idx + 1 : 0;
+        setLanguage(languages[next_idx]);
+    }
 
     return (
         <div className="max-w-4xl mx-auto px-3 py-12 space-y-6">
@@ -20,9 +27,11 @@ export function Pokemon() {
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" id="pokemon-list">
               { pokemons && pokemons.map(pokemon => (
                   <PokemonCard
+                    key={pokemon.id}
                     name={pokemon.name[language]}
                     imageUrl={pokemon.thumbnail}
                     desc={pokemon.description}
+                    onClick={handlePokemonClick}
                   />
                 )) }
           </ul>
