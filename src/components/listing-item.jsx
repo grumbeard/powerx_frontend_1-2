@@ -1,10 +1,10 @@
 import React from "react";
 
-const EditButton = () => (
+const EditButton = ({ text, onClick }) => (
   <button
     type="button"
     className="inline-flex justify-center items-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-    onClick={() => alert("Edit btn clicked, populate the form!")}
+    onClick={onClick}
   >
     <svg
       className="h-4 w-4 mr-1.5"
@@ -14,7 +14,7 @@ const EditButton = () => (
     >
       <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
     </svg>
-    EDIT
+    {text}
   </button>
 );
 
@@ -55,10 +55,16 @@ export function ListingItem({
   imageUrl,
   availability,
   numOfStock,
-  handleDelete,
+  editListing,
+  stopEditListing,
+  isEditing,
+  deleteListing,
 }) {
   const [isDeleting, setIsDeleting] = React.useState(false);
-  const [isEditing, setIsEditing] = React.useState(false);
+
+  function handleStopEdit() {
+    stopEditListing();
+  }
 
   return (
     <div className="relative flex flex-col">
@@ -140,12 +146,28 @@ export function ListingItem({
           </p>
         </div>
         <div className="flex flex-col md:flex-row gap-3 py-3">
-          <EditButton />
+          <EditButton
+            text={isEditing ? "EDITING..." : "EDIT"}
+            onClick={() => {
+              isEditing
+                ? handleStopEdit()
+                : editListing({
+                    id,
+                    title,
+                    description,
+                    price,
+                    condition,
+                    imageUrl,
+                    availability,
+                    numOfStock,
+                  });
+            }}
+          />
           <DeleteButton
             text={isDeleting ? "DELETING..." : "DELETE"}
             onClick={() => {
               setIsDeleting(true);
-              handleDelete(id);
+              deleteListing(id);
             }}
           />
         </div>

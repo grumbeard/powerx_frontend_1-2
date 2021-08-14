@@ -2,6 +2,9 @@ import * as React from "react";
 import { ListingItem } from "../components/listing-item";
 import { ListingForm } from "../components/listing-form";
 
+const defaultImageUrl =
+  "https://images.unsplash.com/photo-1577280467823-02b253474d06?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=543&h=384&q=80";
+
 function getListings() {
   return fetch(
     `https://ecomm-service.herokuapp.com/marketplace?page=1&limit=9`
@@ -22,8 +25,27 @@ function addListing(data) {
   });
 }
 
+function editListing(data) {
+  return fetch(`https://ecomm-service.herokuapp.com/marketplace/${data.id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+}
+
 export function Marketplace() {
+  const [isEditing, setIsEditing] = React.useState(false);
   const [listings, setListings] = React.useState(undefined);
+  const [listing, setListing] = React.useState({
+    id: "",
+    title: "",
+    condition: "new",
+    description: "",
+    availability: "in-stock",
+    imageUrl: defaultImageUrl,
+    numOfStock: "",
+    price: "",
+  });
 
   function loadListings() {
     getListings().then((data) => setListings(data));
@@ -33,8 +55,39 @@ export function Marketplace() {
     deleteListing(id).then(() => loadListings());
   }
 
-  function handleAddListing(data) {
-    return addListing(data).then(() => loadListings());
+  function handleAdd(data) {
+    return addListing(data)
+      .then(() => loadListings())
+      .then(() => resetListing());
+  }
+
+  function handleEditStart(listing) {
+    setListing(listing);
+    setIsEditing(true);
+  }
+
+  function handleEditEnd() {
+    resetListing();
+    setIsEditing(false);
+  }
+
+  function handleEdit(listing) {
+    editListing(listing)
+      .then(() => loadListings())
+      .then(() => handleEditEnd());
+  }
+
+  function resetListing() {
+    setListing({
+      id: "",
+      title: "",
+      condition: "new",
+      description: "",
+      availability: "in-stock",
+      imageUrl: "",
+      numOfStock: "",
+      price: "",
+    });
   }
 
   React.useEffect(() => {
@@ -59,18 +112,21 @@ export function Marketplace() {
             "
           >
             {listings &&
-              listings.map((listing) => (
+              listings.map((item) => (
                 <ListingItem
-                  key={listing._id}
-                  id={listing._id}
-                  title={listing.title}
-                  description={listing.description}
-                  price={listing.price}
-                  condition={listing.condition}
-                  imageUrl={listing.imageUrl}
-                  availability={listing.availability}
-                  numOfStock={listing.numOfStock}
-                  handleDelete={handleDelete}
+                  key={item._id}
+                  id={item._id}
+                  title={item.title}
+                  description={item.description}
+                  price={item.price}
+                  condition={item.condition}
+                  imageUrl={item.imageUrl}
+                  availability={item.availability}
+                  numOfStock={item.numOfStock}
+                  deleteListing={handleDelete}
+                  editListing={handleEditStart}
+                  stopEditListing={handleEditEnd}
+                  isEditing={item._id === listing.id}
                 />
               ))}
           </div>
@@ -86,7 +142,12 @@ export function Marketplace() {
           border-b border-gray-100
         "
       >
-        <ListingForm addListing={handleAddListing} />
+        <ListingForm
+          listing={listing}
+          addListing={handleAdd}
+          isEditing={isEditing}
+          editListing={handleEdit}
+        />
       </div>
     </main>
   );

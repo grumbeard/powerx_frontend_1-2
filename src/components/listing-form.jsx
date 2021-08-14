@@ -1,50 +1,70 @@
 import React from "react";
 
-function clearForm(form) {
-  // Clear all fields
-  [...form.elements].forEach((field) => (field.value = ""));
-  // Default values for dropdown fields to first option
-  const dropdowns = form.querySelectorAll("select");
-  dropdowns.forEach((field) => (field.value = field.options[0].value));
-}
-
-export function ListingForm({ addListing }) {
+export function ListingForm({ listing, addListing, isEditing, editListing }) {
   const [isAdding, setIsAdding] = React.useState(false);
+  const [title, setTitle] = React.useState(listing.title);
+  const [description, setDescription] = React.useState(listing.description);
+  const [price, setPrice] = React.useState(listing.price);
+  const [condition, setCondition] = React.useState(listing.condition);
+  const [imageUrl, setImageUrl] = React.useState(listing.imageUrl);
+  const [availability, setAvailability] = React.useState(listing.availability);
+  const [numOfStock, setNumOfStock] = React.useState(listing.numOfStock);
 
-  function handleAdd(e) {
-    const formData = e.target.elements;
-    const listing = {
-      title: formData["listing-title"].value,
-      condition: formData["listing-condition"].value,
-      description: formData["description"].value,
-      availability: formData["listing-availability"].value,
-      imageUrl: "",
-      numOfStock: Number(formData["num-of-stock"].value) || 0,
-      price: Number(formData["listing-price"].value),
-    };
+  React.useEffect(() => {
+    setTitle(listing.title);
+    setDescription(listing.description);
+    setPrice(listing.price);
+    setCondition(listing.condition);
+    setImageUrl(listing.imageUrl);
+    setAvailability(listing.availability);
+    setNumOfStock(listing.numOfStock);
+  }, [listing]);
 
-    addListing(listing)
-      .then(() => setIsAdding(false))
-      .then(() => clearForm(e.target));
+  function handleAdd() {
+    addListing({
+      title,
+      condition,
+      description,
+      availability,
+      imageUrl: imageUrl || "",
+      numOfStock: Number(numOfStock) || 0,
+      price: Number(price),
+    }).then(() => setIsAdding(false));
+  }
+
+  function handleEdit() {
+    editListing({
+      id: listing.id,
+      title,
+      condition,
+      description,
+      availability,
+      imageUrl: imageUrl || "",
+      numOfStock: Number(numOfStock) || 0,
+      price: Number(price),
+    });
   }
 
   return (
     <form
-      className="flex flex-col h-full"
+      className="sticky top-0"
       onSubmit={(e) => {
         e.preventDefault();
-        setIsAdding(true);
-        handleAdd(e);
+        if (!isEditing) setIsAdding(true);
+        !isEditing ? handleAdd() : handleEdit();
       }}
     >
       <div className="py-6 px-4 bg-pink-700 sm:px-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium text-white">New Listing</h2>
+          <h2 className="text-lg font-medium text-white">
+            {isEditing ? `Edit "${title}"` : "New Listing"}
+          </h2>
         </div>
         <div className="mt-1">
           <p className="text-sm text-pink-300">
-            Get started by filling in the information below to create your new
-            listing.
+            {isEditing
+              ? "Edit this listing by updating the fields below and clicking 'Edit'."
+              : "Get started by filling in the information below to create your new listing."}
           </p>
         </div>
       </div>
@@ -72,6 +92,8 @@ export function ListingForm({ addListing }) {
                       border-gray-300
                       rounded-md
                     "
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
           </div>
@@ -97,6 +119,8 @@ export function ListingForm({ addListing }) {
                       border-gray-300
                       rounded-md
                     "
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
               />
             </div>
           </div>
@@ -122,6 +146,8 @@ export function ListingForm({ addListing }) {
                       border border-gray-300
                       rounded-md
                     "
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               ></textarea>
             </div>
           </div>
@@ -151,6 +177,8 @@ export function ListingForm({ addListing }) {
                       sm:text-sm
                       rounded-md
                     "
+                value={condition}
+                onChange={(e) => setCondition(e.target.value)}
               >
                 <option value="new">New</option>
                 <option value="used_like-new">Used (like new)</option>
@@ -185,6 +213,8 @@ export function ListingForm({ addListing }) {
                       sm:text-sm
                       rounded-md
                     "
+                value={availability}
+                onChange={(e) => setAvailability(e.target.value)}
               >
                 <option value="in-stock">In Stock</option>
                 <option value="single-item">Single Item</option>
@@ -214,6 +244,10 @@ export function ListingForm({ addListing }) {
                       border-gray-300
                       rounded-md
                     "
+                value={numOfStock}
+                min="1"
+                max={availability === "single-item" ? "1" : "10000"}
+                onChange={(e) => setNumOfStock(e.target.value)}
               />
             </div>
           </div>
@@ -251,7 +285,9 @@ export function ListingForm({ addListing }) {
                 focus:ring-pink-500
               "
         >
-          {isAdding ? "ADDING..." : "ADD"}
+          {!isAdding && !isEditing && "ADD"}
+          {isAdding && !isEditing && "ADDING..."}
+          {isEditing && "EDIT"}
         </button>
       </div>
     </form>
