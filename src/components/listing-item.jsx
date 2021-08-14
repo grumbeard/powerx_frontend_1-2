@@ -61,9 +61,9 @@ export function ListingItem({
   const [isEditing, setIsEditing] = React.useState(false);
 
   return (
-    <div class="relative flex flex-col">
+    <div className="relative flex flex-col">
       <div
-        class="
+        className="
           group
           block
           w-full
@@ -79,7 +79,7 @@ export function ListingItem({
         <img
           src={imageUrl}
           alt=""
-          class="
+          className="
               object-cover
               pointer-events-none
               group-hover:opacity-75
@@ -87,12 +87,12 @@ export function ListingItem({
               w-full
           "
         />
-        <button type="button" class="absolute focus:outline-none">
-          <span class="sr-only">View details for Nike Air 2021</span>
+        <button type="button" className="absolute focus:outline-none">
+          <span className="sr-only">View details for Nike Air 2021</span>
         </button>
       </div>
       <div
-        class="
+        className="
           flex-1 flex
           md:flex-col
           justify-between
@@ -102,10 +102,10 @@ export function ListingItem({
           px-2
           "
       >
-        <div class="mt-1 flex-1">
-          <div class="flex justify-between items-center gap-3">
+        <div className="mt-1 flex-1">
+          <div className="flex justify-between items-center gap-3">
             <div>
-              RM <span class="text-2xl font-bold">{price}</span>
+              RM <span className="text-2xl font-bold">{price}</span>
             </div>
             {availability === "single-item" ? (
               <Badge>Only One</Badge>
@@ -116,7 +116,7 @@ export function ListingItem({
             )}
           </div>
           <p
-            class="
+            className="
               block
               text-sm
               font-medium
@@ -128,7 +128,7 @@ export function ListingItem({
             {title}
           </p>
           <p
-            class="
+            className="
               block
               text-sm
               font-medium
@@ -139,12 +139,12 @@ export function ListingItem({
             {description}
           </p>
         </div>
-        <div class="flex flex-col md:flex-row gap-3 py-3">
+        <div className="flex flex-col md:flex-row gap-3 py-3">
           <EditButton />
           <DeleteButton
             text={isDeleting ? "DELETING..." : "DELETE"}
             onClick={() => {
-              setIsDeleting(!isDeleting);
+              setIsDeleting(true);
               handleDelete(id);
             }}
           />

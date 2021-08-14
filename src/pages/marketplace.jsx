@@ -8,9 +8,17 @@ function getListings() {
   ).then((res) => res.json());
 }
 
-function handleDelete(id) {
-  fetch(`https://ecomm-service.herokuapp.com/marketplace/${id}`, {
+function deleteListing(id) {
+  return fetch(`https://ecomm-service.herokuapp.com/marketplace/${id}`, {
     method: "DELETE",
+  });
+}
+
+function addListing(data) {
+  return fetch(`https://ecomm-service.herokuapp.com/marketplace`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
   });
 }
 
@@ -21,21 +29,29 @@ export function Marketplace() {
     getListings().then((data) => setListings(data));
   }
 
+  function handleDelete(id) {
+    deleteListing(id).then(() => loadListings());
+  }
+
+  function handleAddListing(data) {
+    return addListing(data).then(() => loadListings());
+  }
+
   React.useEffect(() => {
     loadListings();
   }, []);
 
   return (
-    <main class="bg-gray-50 lg:flex">
-      <div class="flex-1">
-        <div class="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
-          <div class="sm:flex sm:flex-col sm:align-center mb-12">
-            <h1 class="text-5xl font-extrabold text-gray-900 sm:text-center">
+    <main className="bg-gray-50 lg:flex">
+      <div className="flex-1">
+        <div className="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
+          <div className="sm:flex sm:flex-col sm:align-center mb-12">
+            <h1 className="text-5xl font-extrabold text-gray-900 sm:text-center">
               Marketplace
             </h1>
           </div>
           <div
-            class="
+            className="
               grid
               md:grid-cols-2
               gap-x-4 gap-y-8
@@ -45,6 +61,7 @@ export function Marketplace() {
             {listings &&
               listings.map((listing) => (
                 <ListingItem
+                  key={listing._id}
                   id={listing._id}
                   title={listing.title}
                   description={listing.description}
@@ -61,7 +78,7 @@ export function Marketplace() {
       </div>
 
       <div
-        class="
+        className="
           flex-initial
           bg-white
           w-full
@@ -69,7 +86,7 @@ export function Marketplace() {
           border-b border-gray-100
         "
       >
-        <ListingForm />
+        <ListingForm addListing={handleAddListing} />
       </div>
     </main>
   );

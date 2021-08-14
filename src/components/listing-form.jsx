@@ -1,35 +1,69 @@
 import React from "react";
 
-export function ListingForm() {
+function clearForm(form) {
+  // Clear all fields
+  [...form.elements].forEach((field) => (field.value = ""));
+  // Default values for dropdown fields to first option
+  const dropdowns = form.querySelectorAll("select");
+  dropdowns.forEach((field) => (field.value = field.options[0].value));
+}
+
+export function ListingForm({ addListing }) {
+  const [isAdding, setIsAdding] = React.useState(false);
+
+  function handleAdd(e) {
+    const formData = e.target.elements;
+    const listing = {
+      title: formData["listing-title"].value,
+      condition: formData["listing-condition"].value,
+      description: formData["description"].value,
+      availability: formData["listing-availability"].value,
+      imageUrl: "",
+      numOfStock: Number(formData["num-of-stock"].value) || 0,
+      price: Number(formData["listing-price"].value),
+    };
+
+    addListing(listing)
+      .then(() => setIsAdding(false))
+      .then(() => clearForm(e.target));
+  }
+
   return (
-    <form class="flex flex-col h-full">
-      <div class="py-6 px-4 bg-pink-700 sm:px-6">
-        <div class="flex items-center justify-between">
-          <h2 class="text-lg font-medium text-white">New Listing</h2>
+    <form
+      className="flex flex-col h-full"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setIsAdding(true);
+        handleAdd(e);
+      }}
+    >
+      <div className="py-6 px-4 bg-pink-700 sm:px-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-medium text-white">New Listing</h2>
         </div>
-        <div class="mt-1">
-          <p class="text-sm text-pink-300">
+        <div className="mt-1">
+          <p className="text-sm text-pink-300">
             Get started by filling in the information below to create your new
             listing.
           </p>
         </div>
       </div>
-      <div class="px-4 sm:px-6 pb-12">
-        <div class="space-y-6 pt-6 pb-5">
+      <div className="px-4 sm:px-6 pb-12">
+        <div className="space-y-6 pt-6 pb-5">
           <div>
             <label
-              for="listing-title"
-              class="block text-sm font-medium text-gray-900"
+              htmlFor="listing-title"
+              className="block text-sm font-medium text-gray-900"
             >
               Title
             </label>
-            <div class="mt-1">
+            <div className="mt-1">
               <input
                 type="text"
                 name="listing-title"
                 id="listing-title"
-                required=""
-                class="
+                required="required"
+                className="
                       block
                       w-full
                       shadow-sm
@@ -43,18 +77,18 @@ export function ListingForm() {
           </div>
           <div>
             <label
-              for="listing-price"
-              class="block text-sm font-medium text-gray-900"
+              htmlFor="listing-price"
+              className="block text-sm font-medium text-gray-900"
             >
               Price
             </label>
-            <div class="mt-1">
+            <div className="mt-1">
               <input
                 type="number"
                 name="listing-price"
                 id="listing-price"
-                required=""
-                class="
+                required="required"
+                className="
                       block
                       w-full
                       shadow-sm
@@ -68,18 +102,18 @@ export function ListingForm() {
           </div>
           <div>
             <label
-              for="description"
-              class="block text-sm font-medium text-gray-900"
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-900"
             >
               Description
             </label>
-            <div class="mt-1">
+            <div className="mt-1">
               <textarea
                 id="description"
                 name="description"
                 rows="4"
-                required=""
-                class="
+                required="required"
+                className="
                       block
                       w-full
                       shadow-sm
@@ -93,17 +127,17 @@ export function ListingForm() {
           </div>
           <div>
             <label
-              for="listing-condition"
-              class="block text-sm font-medium text-gray-900"
+              htmlFor="listing-condition"
+              className="block text-sm font-medium text-gray-900"
             >
               Condition
             </label>
-            <div class="mt-1">
+            <div className="mt-1">
               <select
                 id="listing-condition"
                 name="listing-condition"
-                required=""
-                class="
+                required="required"
+                className="
                       block
                       w-full
                       pl-3
@@ -127,17 +161,17 @@ export function ListingForm() {
           </div>
           <div>
             <label
-              for="listing-availability"
-              class="block text-sm font-medium text-gray-900"
+              htmlFor="listing-availability"
+              className="block text-sm font-medium text-gray-900"
             >
               Availability
             </label>
-            <div class="mt-1">
+            <div className="mt-1">
               <select
                 id="listing-availability"
                 name="listing-availability"
-                required=""
-                class="
+                required="required"
+                className="
                       block
                       w-full
                       pl-3
@@ -160,18 +194,18 @@ export function ListingForm() {
 
           <div>
             <label
-              for="num-of-stock"
-              class="block text-sm font-medium text-gray-900"
+              htmlFor="num-of-stock"
+              className="block text-sm font-medium text-gray-900"
             >
               Number of Available Stock
             </label>
-            <div class="mt-1">
+            <div className="mt-1">
               <input
                 type="number"
                 name="num-of-stock"
                 id="num-of-stock"
                 required=""
-                class="
+                className="
                       block
                       w-full
                       shadow-sm
@@ -186,7 +220,7 @@ export function ListingForm() {
         </div>
       </div>
       <div
-        class="
+        className="
               flex-shrink-0
               px-4
               py-4
@@ -197,7 +231,7 @@ export function ListingForm() {
       >
         <button
           type="submit"
-          class="
+          className="
                 ml-4
                 inline-flex
                 justify-center
@@ -217,7 +251,7 @@ export function ListingForm() {
                 focus:ring-pink-500
               "
         >
-          ADD
+          {isAdding ? "ADDING..." : "ADD"}
         </button>
       </div>
     </form>
