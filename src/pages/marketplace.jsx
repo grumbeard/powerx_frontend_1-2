@@ -2,23 +2,24 @@ import * as React from "react";
 import { ListingItem } from "../components/listing-item";
 import { ListingForm } from "../components/listing-form";
 
+const API_SOURCE = process.env.REACT_APP_API_SOURCE;
+console.log(API_SOURCE);
+
 const defaultImageUrl =
   "https://images.unsplash.com/photo-1577280467823-02b253474d06?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=543&h=384&q=80";
 
 function getListings() {
-  return fetch(
-    `https://ecomm-service.herokuapp.com/marketplace?page=1&limit=9`
-  ).then((res) => res.json());
+  return fetch(`${API_SOURCE}?page=1&limit=9`).then((res) => res.json());
 }
 
 function deleteListing(id) {
-  return fetch(`https://ecomm-service.herokuapp.com/marketplace/${id}`, {
+  return fetch(`${API_SOURCE}/${id}`, {
     method: "DELETE",
   });
 }
 
 function addListing(data) {
-  return fetch(`https://ecomm-service.herokuapp.com/marketplace`, {
+  return fetch(`${API_SOURCE}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -26,7 +27,7 @@ function addListing(data) {
 }
 
 function editListing(data) {
-  return fetch(`https://ecomm-service.herokuapp.com/marketplace/${data.id}`, {
+  return fetch(`${API_SOURCE}/${data.id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
