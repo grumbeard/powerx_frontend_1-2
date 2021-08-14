@@ -2,6 +2,7 @@ import * as React from "react";
 import { BillSplitter } from './pages/bill-splitter';
 import { Career } from './pages/career';
 import { Pokemon } from './pages/pokemon';
+import { Marketplace } from './pages/marketplace';
 
 const buttonClassActive = "flex-1 px-3 py-1 bg-gray-500 text-white rounded shadow";
 const buttonClassInactive = "flex-1 px-3 py-1 bg-gray-200 text-white rounded shadow";
@@ -16,32 +17,42 @@ export function App() {
                 <button
                     id="tab-btn-1"
                     className={activeBtn === 'tab-btn-1' ? buttonClassActive : buttonClassInactive}
-                    onClick={ () => {
+                    onClick={() => {
                         setActiveBtn('tab-btn-1');
                         setActiveTab(<BillSplitter />);
-                    } }
+                    }}
                 >
                     Bill Splitter
                 </button>
                 <button
                     id="tab-btn-2"
                     className={activeBtn === 'tab-btn-2' ? buttonClassActive : buttonClassInactive}
-                    onClick={ () => {
+                    onClick={() => {
                         setActiveBtn('tab-btn-2');
                         setActiveTab(<Career />);
-                    } }
+                    }}
                 >
                     Careers
                 </button>
                 <button
                     id="tab-btn-3"
                     className={activeBtn === 'tab-btn-3' ? buttonClassActive : buttonClassInactive}
-                    onClick={ () => {
+                    onClick={() => {
                         setActiveBtn('tab-btn-3');
                         setActiveTab(<Pokemon />);
-                    } }
+                    }}
                 >
                     Pokemon
+                </button>
+                <button
+                    id="tab-btn-4"
+                    className={activeBtn === 'tab-btn-4' ? buttonClassActive : buttonClassInactive}
+                    onClick={() => {
+                        setActiveBtn('tab-btn-4');
+                        setActiveTab(<Marketplace />);
+                    }}
+                >
+                    Marketplace
                 </button>
             </div>
             {activeTab}

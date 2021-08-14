@@ -1,4 +1,4 @@
-# Assignments: Frontend Development (Session 2)
+# Assignments: Frontend Development (Session 2 & 3)
 
 This project bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
