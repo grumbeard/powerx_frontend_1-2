@@ -27,8 +27,9 @@ const EditButton = (props) => {
 };
 
 const DeleteButton = (props) => {
+
     return (
-        <IconButton title="Delete" onClick={props.onClick}>
+        <IconButton title="Delete" onClick={() => props.onClick(props.jobId)}>
             <svg
                 className="w-5 h-5 text-gray-400"
                 fill="currentColor"
@@ -75,6 +76,7 @@ const CareerItemTitle = (props) => {
 };
 
 export function CareerItem({
+    jobId,
     title,
     department,
     level,
@@ -102,8 +104,8 @@ export function CareerItem({
                     </div>
                 </div>
                 <div className="ml-5 flex-shrink-0 inline-flex items-center justify-center gap-2">
-                    <EditButton onClick={onEdit} />
-                    <DeleteButton onClick={onDelete} />
+                    {/* <EditButton onClick={onEdit} /> */}
+                    <DeleteButton onClick={onDelete} jobId={jobId} />
                 </div>
             </div>
         </div>

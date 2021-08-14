@@ -10,6 +10,10 @@ export const Career = () => {
         setJobs([...jobs, job]);
     }
 
+    function handleDeleteJob(id) {
+        setJobs([...jobs].filter(job => job._id !== id));
+    }
+
     return (
         <section className="max-w-6xl mx-auto px-3 py-12 space-y-6">
             <div className="mb-8">
@@ -28,11 +32,12 @@ export const Career = () => {
                 <ul id="careerList" className="md:flex-1 space-y-3">
                     {jobs.map((job) => (
                         <CareerItem
+                            jobId={job._id}
                             title={job.title}
                             department={job.department}
                             level={job.level}
                             onEdit={() => alert("Edit btn clicked, populate the form!")}
-                            onDelete={() => alert("Delete btn clicked, delete the item!")}
+                            onDelete={handleDeleteJob}
                             key={job._id}
                         />
                     ))}

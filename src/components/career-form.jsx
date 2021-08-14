@@ -1,11 +1,6 @@
 import { v4 as uuid } from "uuid";
 
 function CareerForm({ addJob }) {
-    const title = document.getElementById('job-title');
-    const level = document.getElementById('job-level');
-    const department = document.getElementById('job-department');
-    const summary = document.getElementById('job-summary');
-    const headcount = document.getElementById('headcount');
 
     function handleAdd(e) {
         e.preventDefault();
